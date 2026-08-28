@@ -451,21 +451,12 @@ export function useSniper() {
           const isFirstFetchForTarget = !target.lastSeenTweetId
           updatedTarget.lastSeenTweetId = latestTweet.id
 
-          // Save lastSeenTweetId IMMEDIATELY
+          // Save lastSeenTweetId
           const updatedTargets = targetsRef.current.map((t) =>
             t.id === target.id ? updatedTarget : t
           )
           saveTargets(updatedTargets)
 
-          // JANGAN masukkan tweet lama ke feed jika ini fetch pertama saat akun baru di-add
-          if (isFirstFetchForTarget) {
-            for (const t of tweets) {
-              markTweetAsProcessed(t.id)
-            }
-            continue
-          }
-
-          // HANYA proses dan tampilkan tweet baru yang di-post SETELAH akun di-add
           newTweetsCount += tweets.length
 
           const newItems: TweetFeedItem[] = tweets.map((t: { id: string; text: string; createdAt: string; displayName?: string; profileImageUrl?: string }) => {
@@ -487,20 +478,27 @@ export function useSniper() {
           if (freshItems.length > 0) {
             const combined = [...freshItems, ...feedRef.current]
             saveFeed(combined)
+          }
 
-            // Auto-buy triggers ONLY for newly posted tweets containing a CA, and exactly once per tweetId
-            for (const item of freshItems) {
-              if (
-                item.detectedCas.length > 0 &&
-                !processedTweetsRef.current.has(item.id) &&
-                !buyingLocks.current.has(item.id)
-              ) {
+          // Auto-buy triggers for newly posted tweets containing a CA
+          for (const item of newItems) {
+            if (
+              item.detectedCas.length > 0 &&
+              !processedTweetsRef.current.has(item.id) &&
+              !buyingLocks.current.has(item.id)
+            ) {
+              const tweetAgeMs = Date.now() - item.createdAt
+              const isRecent = tweetAgeMs < 15 * 60 * 1000 // Last 15 minutes
+
+              if (!isFirstFetchForTarget || isRecent) {
                 // Notify CA Detection to Telegram
                 notifyCaDetected(target.username, item.detectedCas[0], item.text).catch((err) => {
                   console.error('[Telegram] Failed to send CA detected notification:', err)
                 })
 
                 await executeAutoBuy(target.username, item.detectedCas[0], target.buyAmountEth, item.id, item.text)
+              } else {
+                markTweetAsProcessed(item.id)
               }
             }
           }

@@ -96,8 +96,8 @@ export async function POST(req: NextRequest) {
       USER_CACHE.set(cleanUsername, cachedUser)
     }
 
-    // 2. Fetch latest tweets from the user's timeline with author expansions
-    let tweetsUrl = `https://api.twitter.com/2/users/${twitterUserId}/tweets?max_results=10&exclude=retweets,replies&expansions=author_id&user.fields=profile_image_url,name,username&tweet.fields=created_at,text`
+    // 2. Fetch latest tweets from the user's timeline with author expansions (include replies so CA in replies/threads are captured)
+    let tweetsUrl = `https://api.twitter.com/2/users/${twitterUserId}/tweets?max_results=10&exclude=retweets&expansions=author_id&user.fields=profile_image_url,name,username&tweet.fields=created_at,text`
     if (sinceId) {
       tweetsUrl += `&since_id=${sinceId}`
     }
