@@ -248,6 +248,12 @@ export async function POST(req: NextRequest) {
 
       if (String(msg.chat.id) !== cleanChatId) continue
 
+      // Ignore stale messages older than 3 minutes to prevent re-executing backlog /add commands
+      const nowSec = Math.floor(Date.now() / 1000)
+      if (msg.date && (nowSec - msg.date > 180)) {
+        continue
+      }
+
       const rawText = msg.text.trim()
       const parts = rawText.split(/\s+/)
       const command = parts[0].toLowerCase().split('@')[0]

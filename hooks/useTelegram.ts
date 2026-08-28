@@ -45,9 +45,13 @@ export function useTelegram() {
   const [isVerifying, setIsVerifying] = useState(false)
   const [isSendingTest, setIsSendingTest] = useState(false)
 
-  // Sync state when userId changes
+  // Sync state from storage event or updates
   useEffect(() => {
-    setConfig(getStoredItem<TelegramConfig>(STORAGE_KEY, DEFAULT_TELEGRAM_CONFIG))
+    const handleConfigSync = () => {
+      setConfig(getStoredItem<TelegramConfig>(STORAGE_KEY, DEFAULT_TELEGRAM_CONFIG))
+    }
+    window.addEventListener('rh_telegram_updated', handleConfigSync)
+    return () => window.removeEventListener('rh_telegram_updated', handleConfigSync)
   }, [STORAGE_KEY])
 
   const saveConfig = useCallback(
@@ -55,6 +59,7 @@ export function useTelegram() {
       setConfig(newConfig)
       if (typeof window !== 'undefined') {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(newConfig))
+        window.dispatchEvent(new Event('rh_telegram_updated'))
       }
     },
     [STORAGE_KEY]
@@ -301,9 +306,17 @@ export function useTelegram() {
     [config.enabled, config.notifyOnSuccess, config.botToken, config.chatId, address, twitterUsername, sendMessage]
   )
 
-  // Ref to track last handled update_id
-  const lastUpdateIdRef = useRef<number>(0)
+  // Ref to track last handled update_id persisted per user
+  const STORAGE_KEY_LAST_UPDATE = `rh_telegram_last_update_${userId}`
+  const lastUpdateIdRef = useRef<number>(
+    getStoredItem<number>(STORAGE_KEY_LAST_UPDATE, 0)
+  )
   const isPollingRef = useRef<boolean>(false)
+
+  // Sync lastUpdateIdRef when userId changes
+  useEffect(() => {
+    lastUpdateIdRef.current = getStoredItem<number>(STORAGE_KEY_LAST_UPDATE, 0)
+  }, [STORAGE_KEY_LAST_UPDATE])
 
   // Polling loop to listen and reply to user Telegram commands (/balance, /start, /targets, /add, /remove, /wallet, /status)
   useEffect(() => {
@@ -332,6 +345,9 @@ export function useTelegram() {
           const data = await res.json()
           if (data.newLastUpdateId && data.newLastUpdateId > lastUpdateIdRef.current) {
             lastUpdateIdRef.current = data.newLastUpdateId
+            if (typeof window !== 'undefined') {
+              localStorage.setItem(STORAGE_KEY_LAST_UPDATE, String(data.newLastUpdateId))
+            }
           }
 
           // If a target was added or removed via Telegram, sync to local state & UI
@@ -342,7 +358,7 @@ export function useTelegram() {
             }
           }
         }
-      } catch (err) {
+      } catch {
         // Ignore network errors in polling loop
       } finally {
         isPollingRef.current = false
@@ -356,7 +372,7 @@ export function useTelegram() {
       clearTimeout(timer)
       clearInterval(interval)
     }
-  }, [config.botToken, config.chatId, address, twitterUsername, userId])
+  }, [config.botToken, config.chatId, address, twitterUsername, userId, STORAGE_KEY_LAST_UPDATE])
 
   return {
     config,

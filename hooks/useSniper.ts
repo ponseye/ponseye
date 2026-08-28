@@ -109,7 +109,7 @@ export function useSniper() {
     rateLimitUntilRef.current = rateLimitUntil
   }, [rateLimitUntil])
 
-  // Sync targets from Telegram command updates
+  // Sync targets from Telegram command updates or other components
   useEffect(() => {
     const handleTargetsSync = (e: Event) => {
       const customEvent = e as CustomEvent<SniperTarget[]>
@@ -385,20 +385,50 @@ export function useSniper() {
 
   const removeTarget = useCallback(
     (id: string) => {
-      const target = targets.find((t) => t.id === id)
-      const updated = targets.filter((t) => t.id !== id)
+      const cleanInput = sanitizeUsername(id)
+      const target = targets.find((t) => t.id === id || t.username.toLowerCase() === cleanInput)
+      const targetUsername = target?.username.toLowerCase() || cleanInput
+
+      const updated = targets.filter(
+        (t) => t.id !== id && t.username.toLowerCase() !== targetUsername
+      )
       saveTargets(updated)
 
-      if (target) {
-        const filteredFeed = feed.filter(
-          (f) => f.username.toLowerCase() !== target.username.toLowerCase()
-        )
-        saveFeed(filteredFeed)
+      const filteredFeed = feedRef.current.filter(
+        (f) => f.username.toLowerCase() !== targetUsername
+      )
+      saveFeed(filteredFeed)
+
+      // Also clean up across guest and current user keys to prevent ghost targets from reappearing
+      if (typeof window !== 'undefined') {
+        const potentialKeys = new Set([
+          STORAGE_KEY_TARGETS,
+          `rh_sniper_targets_guest`,
+          `rh_sniper_targets_${userId}`,
+          address ? `rh_sniper_targets_${address}` : '',
+          user?.id ? `rh_sniper_targets_${user.id}` : '',
+        ])
+
+        potentialKeys.forEach((key) => {
+          if (!key) return
+          try {
+            const stored = localStorage.getItem(key)
+            if (stored) {
+              const parsed: SniperTarget[] = JSON.parse(stored)
+              if (Array.isArray(parsed)) {
+                const cleaned = parsed.filter(
+                  (t) => t.id !== id && t.username.toLowerCase() !== targetUsername
+                )
+                localStorage.setItem(key, JSON.stringify(cleaned))
+              }
+            }
+          } catch {}
+        })
       }
 
       toast.success('Target removed from watchlist')
     },
-    [targets, feed, saveTargets, saveFeed]
+    [targets, saveTargets, saveFeed, STORAGE_KEY_TARGETS, userId, address, user]
   )
 
   const toggleTarget = useCallback(
@@ -534,7 +564,7 @@ export function useSniper() {
     if (newTweetsCount > 0) {
       toast.success(`${newTweetsCount} new posts loaded from Twitter!`)
     }
-  }, [saveTargets, saveFeed, executeAutoBuy, markTweetAsProcessed, notifyCaDetected])
+  }, [saveTargets, saveFeed, executeAutoBuy, notifyCaDetected])
 
   // Polling loop otomatis (setiap 20 detik) & auto-refresh saat window focus
   useEffect(() => {
