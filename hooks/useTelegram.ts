@@ -254,6 +254,9 @@ export function useTelegram() {
 
       await sendMessage(msg)
     },
+    [config.enabled, config.notifyOnFailed, config.botToken, config.chatId, address, twitterUsername, sendMessage]
+  )
+
   const notifyManualSwap = useCallback(
     async ({
       tradeType,
