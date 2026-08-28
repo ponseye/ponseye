@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback, useRef } from 'react'
-import { usePrivy, useSendTransaction } from '@privy-io/react-auth'
+import { usePrivy } from '@privy-io/react-auth'
 import { useWallet } from '@/hooks/useWallet'
 import { useTelegram } from '@/hooks/useTelegram'
 import {
@@ -14,7 +14,14 @@ import {
 import { getPonsTokenInfo, PONS_CURVE_ABI } from '@/lib/pons-v2'
 import { activeChain } from '@/lib/chains'
 import { trackTokenAddress } from '@/hooks/useTokens'
-import { parseEther, encodeFunctionData, isAddress, getAddress } from 'viem'
+import {
+  parseEther,
+  encodeFunctionData,
+  isAddress,
+  getAddress,
+  createWalletClient,
+  custom,
+} from 'viem'
 import toast from 'react-hot-toast'
 
 const SWAP_ROUTER = '0x1e406484F1F204b23cE84B9901C0171a738fd406' as `0x${string}`
@@ -58,7 +65,6 @@ function getStoredItem<T>(key: string, defaultValue: T): T {
 export function useSniper() {
   const { user } = usePrivy()
   const { sendEth, balance, address, embeddedWallet, refetchBalance } = useWallet()
-  const { sendTransaction } = useSendTransaction()
   const { notifyCaDetected, notifyAutoBuySuccess, notifyAutoBuyFailed } = useTelegram()
 
   // Storage key isolated per user
@@ -208,6 +214,12 @@ export function useSniper() {
         if (!embeddedWallet || !address) throw new Error('Embedded wallet is not ready')
 
         await embeddedWallet.switchChain(activeChain.id)
+        const provider = await embeddedWallet.getEthereumProvider()
+        const walletClient = createWalletClient({
+          chain: activeChain,
+          transport: custom(provider),
+        })
+        const [account] = await walletClient.getAddresses()
         const amountInWei = parseEther(amountEth)
         let tx = ''
 
@@ -223,14 +235,13 @@ export function useSniper() {
             args: [amountInWei, 0n, address as `0x${string}`],
           })
 
-          const result = await sendTransaction({
+          tx = await walletClient.sendTransaction({
+            account,
             to: curveAddr,
             value: isNative ? amountInWei : 0n,
             data: buyData,
-            chainId: activeChain.id,
-            gasLimit: 500000n,
+            gas: 400000n,
           })
-          tx = typeof result === 'string' ? result : (result as { transactionHash?: string })?.transactionHash || ''
         } else {
           // 2. Routing melalui SushiSwap V3 / Uniswap V3 Router
           const deadline = BigInt(Math.floor(Date.now() / 1000) + 1200)
@@ -250,14 +261,13 @@ export function useSniper() {
           })
 
           try {
-            const result = await sendTransaction({
+            tx = await walletClient.sendTransaction({
+              account,
               to: SWAP_ROUTER,
               value: amountInWei,
               data: calldata,
-              chainId: activeChain.id,
-              gasLimit: 500000n,
+              gas: 400000n,
             })
-            tx = typeof result === 'string' ? result : (result as { transactionHash?: string })?.transactionHash || ''
           } catch (routerErr) {
             console.warn('[Sniper] DEX Router swap fallback to sendEth:', routerErr)
             const fallbackRes = await sendEth(ca, amountEth)
@@ -342,7 +352,7 @@ export function useSniper() {
         buyingLocks.current.delete(tweetId)
       }
     },
-    [embeddedWallet, address, logs, markTweetAsProcessed, saveLogs, saveFeed, sendTransaction, sendEth, saveTargets, userId, refetchBalance, notifyAutoBuySuccess, notifyAutoBuyFailed]
+    [embeddedWallet, address, logs, markTweetAsProcessed, saveLogs, saveFeed, sendEth, saveTargets, userId, refetchBalance, notifyAutoBuySuccess, notifyAutoBuyFailed]
   )
 
   const addTarget = useCallback(
@@ -451,54 +461,59 @@ export function useSniper() {
           const isFirstFetchForTarget = !target.lastSeenTweetId
           updatedTarget.lastSeenTweetId = latestTweet.id
 
-          // Save lastSeenTweetId
+          // Save lastSeenTweetId & metadata
           const updatedTargets = targetsRef.current.map((t) =>
             t.id === target.id ? updatedTarget : t
           )
           saveTargets(updatedTargets)
 
-          newTweetsCount += tweets.length
+          // Filter: Hanya ambil postingan yang dibuat SETELAH target ditambahkan ke watchlist
+          // Postingan lama (sebelum target dibuat) TIDAK AKAN dimasukkan ke feed
+          const freshTweetsOnly = isFirstFetchForTarget
+            ? tweets.filter((t: { created_at: string }) => {
+                const tweetTime = new Date(t.created_at).getTime()
+                return tweetTime >= target.createdAt - 30000 // Hanya tweet dalam kurun 30 detik saat/setelah target dibuat
+              })
+            : tweets
 
-          const newItems: TweetFeedItem[] = tweets.map((t: { id: string; text: string; createdAt: string; displayName?: string; profileImageUrl?: string }) => {
-            const cas = extractContractAddresses(t.text)
-            return {
-              id: t.id,
-              username: target.username,
-              displayName: t.displayName || fetchedDisplayName || target.displayName,
-              profileImageUrl: t.profileImageUrl || fetchedProfileImageUrl || target.profileImageUrl,
-              text: t.text,
-              createdAt: new Date(t.createdAt).getTime() || Date.now(),
-              detectedCas: cas,
-              snipedStatus: 'idle',
+          if (freshTweetsOnly.length > 0) {
+            newTweetsCount += freshTweetsOnly.length
+
+            const newItems: TweetFeedItem[] = freshTweetsOnly.map((t: { id: string; text: string; createdAt?: string; created_at?: string; displayName?: string; profileImageUrl?: string }) => {
+              const cas = extractContractAddresses(t.text)
+              const createdAtDate = t.createdAt || t.created_at || ''
+              return {
+                id: t.id,
+                username: target.username,
+                displayName: t.displayName || fetchedDisplayName || target.displayName,
+                profileImageUrl: t.profileImageUrl || fetchedProfileImageUrl || target.profileImageUrl,
+                text: t.text,
+                createdAt: createdAtDate ? new Date(createdAtDate).getTime() : Date.now(),
+                detectedCas: cas,
+                snipedStatus: 'idle',
+              }
+            })
+
+            const existingIds = new Set(feedRef.current.map((f) => f.id))
+            const strictlyNewItems = newItems.filter((item) => !existingIds.has(item.id))
+            if (strictlyNewItems.length > 0) {
+              const combined = [...strictlyNewItems, ...feedRef.current]
+              saveFeed(combined)
             }
-          })
 
-          const existingIds = new Set(feedRef.current.map((f) => f.id))
-          const freshItems = newItems.filter((item) => !existingIds.has(item.id))
-          if (freshItems.length > 0) {
-            const combined = [...freshItems, ...feedRef.current]
-            saveFeed(combined)
-          }
-
-          // Auto-buy triggers for newly posted tweets containing a CA
-          for (const item of newItems) {
-            if (
-              item.detectedCas.length > 0 &&
-              !processedTweetsRef.current.has(item.id) &&
-              !buyingLocks.current.has(item.id)
-            ) {
-              const tweetAgeMs = Date.now() - item.createdAt
-              const isRecent = tweetAgeMs < 15 * 60 * 1000 // Last 15 minutes
-
-              if (!isFirstFetchForTarget || isRecent) {
+            // Auto-buy triggers for newly posted tweets containing a CA
+            for (const item of strictlyNewItems) {
+              if (
+                item.detectedCas.length > 0 &&
+                !processedTweetsRef.current.has(item.id) &&
+                !buyingLocks.current.has(item.id)
+              ) {
                 // Notify CA Detection to Telegram
                 notifyCaDetected(target.username, item.detectedCas[0], item.text).catch((err) => {
                   console.error('[Telegram] Failed to send CA detected notification:', err)
                 })
 
                 await executeAutoBuy(target.username, item.detectedCas[0], target.buyAmountEth, item.id, item.text)
-              } else {
-                markTweetAsProcessed(item.id)
               }
             }
           }
