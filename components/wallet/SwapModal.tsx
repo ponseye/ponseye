@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
+import Image from 'next/image'
 import {
   parseEther,
   parseUnits,
@@ -567,12 +568,12 @@ export default function SwapModal({ open, onClose, initialCa }: SwapModalProps) 
       <div className="flex flex-col gap-3">
 
         {/* Network & Slippage Header */}
-        <div className="flex items-center gap-2 text-xs font-semibold text-zinc-300 bg-zinc-950 border border-white/[0.08] rounded-xl px-3 py-2">
-          <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+        <div className="flex items-center gap-2 text-xs font-semibold text-zinc-300 bg-[#09110d] border border-white/[0.08] rounded-xl px-3 py-2">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
           <span>Robinhood Chain Mainnet (4663)</span>
           <button
             onClick={() => setShowSettings(p => !p)}
-            className="ml-auto text-zinc-400 hover:text-white transition-colors text-xs font-mono"
+            className="ml-auto text-zinc-400 hover:text-emerald-300 transition-colors text-xs font-mono"
             title="Slippage settings"
           >
             ⚙️ {slippage}%
@@ -581,7 +582,7 @@ export default function SwapModal({ open, onClose, initialCa }: SwapModalProps) 
 
         {/* Slippage settings */}
         {showSettings && (
-          <div className="bg-zinc-950 border border-white/[0.08] rounded-xl px-4 py-3">
+          <div className="bg-[#09110d] border border-white/[0.08] rounded-xl px-4 py-3">
             <p className="text-xs font-semibold text-zinc-300 mb-2">Slippage Tolerance</p>
             <div className="flex gap-2">
               {[0.1, 0.5, 1, 2, 5].map(v => (
@@ -590,7 +591,7 @@ export default function SwapModal({ open, onClose, initialCa }: SwapModalProps) 
                   onClick={() => setSlippage(v)}
                   className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${
                     slippage === v
-                      ? 'bg-red-600 text-white'
+                      ? 'bg-emerald-600 text-white shadow-md shadow-emerald-950/50'
                       : 'bg-zinc-900 text-zinc-400 hover:text-white'
                   }`}
                 >
@@ -602,7 +603,7 @@ export default function SwapModal({ open, onClose, initialCa }: SwapModalProps) 
         )}
 
         {/* Contract Address Input */}
-        <div className="bg-zinc-950 border border-white/[0.08] rounded-xl p-3 flex flex-col gap-2">
+        <div className="bg-[#09110d] border border-white/[0.08] rounded-xl p-3 flex flex-col gap-2">
           <p className="text-[11px] font-semibold text-zinc-400 uppercase tracking-wider">
             Target Token Contract Address
           </p>
@@ -612,7 +613,7 @@ export default function SwapModal({ open, onClose, initialCa }: SwapModalProps) 
               placeholder="0x... (Token Contract Address)"
               value={caInput}
               onChange={e => { setCaInput(e.target.value.trim()); setTokenInfo(null) }}
-              className="flex-1 bg-black border border-white/[0.08] rounded-lg px-3 py-2 text-xs font-mono text-white placeholder-zinc-600 focus:outline-none focus:ring-1 focus:ring-red-500/50"
+              className="flex-1 bg-black/60 border border-white/[0.08] focus:border-emerald-500/50 rounded-lg px-3 py-2 text-xs font-mono text-white placeholder-zinc-600 focus:outline-none focus:ring-1 focus:ring-emerald-500/50"
             />
             {caInput && (
               <button
@@ -626,13 +627,13 @@ export default function SwapModal({ open, onClose, initialCa }: SwapModalProps) 
 
           {/* Token info card */}
           {fetchingInfo && (
-            <div className="text-xs text-red-400 animate-pulse">Detecting DEX liquidity pool...</div>
+            <div className="text-xs text-emerald-400 animate-pulse">Detecting DEX liquidity pool...</div>
           )}
           {infoError && !fetchingInfo && (
-            <div className="text-xs text-red-400">{infoError}</div>
+            <div className="text-xs text-rose-400">{infoError}</div>
           )}
           {tokenInfo && !fetchingInfo && (
-            <div className="flex items-center justify-between bg-black/60 border border-white/[0.08] rounded-lg px-3 py-2">
+            <div className="flex items-center justify-between bg-black/60 border border-emerald-500/20 rounded-lg px-3 py-2">
               <div>
                 <span className="text-sm font-bold text-white">{tokenInfo.symbol}</span>
                 <span className="text-xs text-zinc-400 ml-2">{tokenInfo.name}</span>
@@ -650,7 +651,7 @@ export default function SwapModal({ open, onClose, initialCa }: SwapModalProps) 
         </div>
 
         {/* FROM */}
-        <div className="bg-zinc-950/80 border border-white/[0.08] rounded-xl p-3.5 sm:p-4">
+        <div className="bg-[#09110d]/80 border border-white/[0.08] rounded-xl p-3.5 sm:p-4 backdrop-blur-md">
           <div className="flex flex-wrap items-center justify-between gap-1 mb-2">
             <span className="text-xs font-semibold text-zinc-400">You Pay</span>
             <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
@@ -665,7 +666,7 @@ export default function SwapModal({ open, onClose, initialCa }: SwapModalProps) 
               </span>
               <button
                 onClick={handleMax}
-                className="text-xs font-bold text-red-400 hover:text-red-300 bg-red-500/10 px-2 py-0.5 rounded-lg font-mono"
+                className="text-xs font-bold text-emerald-400 hover:text-emerald-300 bg-emerald-500/10 px-2 py-0.5 rounded-lg font-mono border border-emerald-500/20"
               >
                 MAX
               </button>
@@ -681,8 +682,10 @@ export default function SwapModal({ open, onClose, initialCa }: SwapModalProps) 
               step="any"
               className="flex-1 min-w-0 bg-transparent text-xl sm:text-2xl font-bold text-white placeholder-zinc-700 focus:outline-none font-mono"
             />
-            <div className="flex items-center gap-1.5 bg-zinc-900 border border-white/[0.08] rounded-xl px-2.5 sm:px-3 py-2 text-xs sm:text-sm font-bold text-white select-none flex-shrink-0">
-              <span>{isBuy ? '🏹' : (tokenInfo ? '🪙' : '?')}</span>
+            <div className="flex items-center gap-1.5 bg-[#09110d] border border-white/[0.08] rounded-xl px-2.5 sm:px-3 py-2 text-xs sm:text-sm font-bold text-white select-none flex-shrink-0">
+              <div className="w-4 h-4 rounded-full overflow-hidden border border-emerald-500/30 flex items-center justify-center bg-black relative flex-shrink-0">
+                <Image src="/logo.svg" alt="token" width={16} height={16} className="object-cover" />
+              </div>
               <span>{fromSymbol}</span>
             </div>
           </div>
@@ -694,7 +697,7 @@ export default function SwapModal({ open, onClose, initialCa }: SwapModalProps) 
             </p>
           )}
           {amountNum > 0 && amountNum > maxBalance && (
-            <p className="text-xs text-red-400 mt-1">Insufficient balance</p>
+            <p className="text-xs text-rose-400 mt-1">Insufficient balance</p>
           )}
         </div>
 
@@ -702,7 +705,7 @@ export default function SwapModal({ open, onClose, initialCa }: SwapModalProps) 
         <div className="flex justify-center -my-1">
           <button
             onClick={handleFlip}
-            className="bg-zinc-900 hover:bg-red-600 border border-white/[0.08] rounded-xl p-2 transition-all text-zinc-400 hover:text-white cursor-pointer"
+            className="bg-zinc-900 hover:bg-emerald-600 border border-white/[0.08] rounded-xl p-2 transition-all text-zinc-400 hover:text-white cursor-pointer"
             title="Switch Direction"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -712,7 +715,7 @@ export default function SwapModal({ open, onClose, initialCa }: SwapModalProps) 
         </div>
 
         {/* TO */}
-        <div className="bg-zinc-950/80 border border-white/[0.08] rounded-xl p-3.5 sm:p-4">
+        <div className="bg-[#09110d]/80 border border-white/[0.08] rounded-xl p-3.5 sm:p-4 backdrop-blur-md">
           <div className="flex flex-wrap items-center justify-between gap-1 mb-2">
             <span className="text-xs font-semibold text-zinc-400">You Receive (Estimated)</span>
             {tokenInfo && (
@@ -720,8 +723,8 @@ export default function SwapModal({ open, onClose, initialCa }: SwapModalProps) 
                 {tokenInfo.source === 'geckoterminal' && <span className="text-zinc-400 font-mono">GeckoTerminal</span>}
                 {tokenInfo.source === 'dexscreener'   && <span className="text-zinc-400 font-mono">DexScreener</span>}
                 {tokenInfo.source === 'onchain_reserves' && <span className="text-emerald-400 font-mono">Pons V2 Pool</span>}
-                {tokenInfo.source === 'onchain_v3'    && <span className="text-red-400 font-mono">Sushi V3 Pool</span>}
-                {tokenInfo.source === 'not_found'      && <span className="text-red-400">Pool not found</span>}
+                {tokenInfo.source === 'onchain_v3'    && <span className="text-emerald-400 font-mono">Sushi V3 Pool</span>}
+                {tokenInfo.source === 'not_found'      && <span className="text-rose-400">Pool not found</span>}
               </span>
             )}
           </div>
@@ -729,8 +732,10 @@ export default function SwapModal({ open, onClose, initialCa }: SwapModalProps) 
             <div className="flex-1 min-w-0 text-xl sm:text-2xl font-bold text-white font-mono truncate">
               {tokenInfo && amountNum > 0 && output > 0 ? fmt(output) : '0.0'}
             </div>
-            <div className="flex items-center gap-1.5 bg-zinc-900 border border-white/[0.08] rounded-xl px-2.5 sm:px-3 py-2 text-xs sm:text-sm font-bold text-white select-none flex-shrink-0">
-              <span>{isBuy ? (tokenInfo ? '🪙' : '?') : '🏹'}</span>
+            <div className="flex items-center gap-1.5 bg-[#09110d] border border-white/[0.08] rounded-xl px-2.5 sm:px-3 py-2 text-xs sm:text-sm font-bold text-white select-none flex-shrink-0">
+              <div className="w-4 h-4 rounded-full overflow-hidden border border-emerald-500/30 flex items-center justify-center bg-black relative flex-shrink-0">
+                <Image src="/logo.svg" alt="token" width={16} height={16} className="object-cover" />
+              </div>
               <span>{toSymbol}</span>
             </div>
           </div>

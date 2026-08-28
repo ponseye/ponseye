@@ -7,6 +7,7 @@ import Button from '@/components/ui/Button'
 import toast from 'react-hot-toast'
 import { createPublicClient, http, erc20Abi, formatEther, encodeFunctionData, getAddress } from 'viem'
 import { useSendTransaction, useExportWallet } from '@privy-io/react-auth'
+import Image from 'next/image'
 
 interface WalletCardProps {
   onSend: () => void
@@ -102,19 +103,21 @@ export default function WalletCard({ onSend, onReceive, onSwap }: WalletCardProp
   const explorerUrl = `${activeChain.blockExplorers.default.url}/address/${address}`
 
   return (
-    <div className="rounded-3xl bg-[#09090b]/90 backdrop-blur-xl border border-white/[0.08] shadow-2xl p-4 sm:p-7 w-full relative overflow-hidden">
-      {/* Subtle background red glow */}
-      <div className="absolute -top-24 -right-24 w-60 h-60 bg-red-600/10 rounded-full blur-3xl pointer-events-none" />
+    <div className="rounded-3xl bg-[#07100c]/75 backdrop-blur-xl border border-emerald-500/15 shadow-2xl p-4 sm:p-7 w-full relative overflow-hidden">
+      {/* Subtle background emerald glow */}
+      <div className="absolute -top-24 -right-24 w-60 h-60 bg-emerald-600/10 rounded-full blur-3xl pointer-events-none" />
 
       {/* Header status */}
       <div className="flex items-center justify-between mb-4 sm:mb-5">
         <div className="flex items-center gap-2">
-          <span className="flex items-center gap-1.5 text-xs font-semibold text-zinc-300 bg-zinc-950 border border-white/[0.08] rounded-full px-2.5 sm:px-3 py-1 font-mono">
-            <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+          <span className="flex items-center gap-2 text-xs font-semibold text-zinc-300 bg-[#09110d] border border-white/[0.08] rounded-full px-2.5 sm:px-3 py-1 font-mono">
+            <div className="w-3.5 h-3.5 rounded-full overflow-hidden border border-emerald-500/30 flex items-center justify-center bg-black relative flex-shrink-0">
+              <Image src="/logo.svg" alt="Robinhood" width={14} height={14} className="object-cover" />
+            </div>
             Robinhood Chain
           </span>
         </div>
-        <span className="flex items-center gap-1.5 text-xs text-zinc-400 bg-zinc-950 border border-white/[0.08] rounded-full px-2.5 sm:px-3 py-1 font-mono">
+        <span className="flex items-center gap-1.5 text-xs text-zinc-400 bg-[#09110d] border border-white/[0.08] rounded-full px-2.5 sm:px-3 py-1 font-mono">
           <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
           Live Sync
         </span>
@@ -122,12 +125,12 @@ export default function WalletCard({ onSend, onReceive, onSwap }: WalletCardProp
 
       {/* WETH Auto-Unwrap Banner if user holds WETH */}
       {wethBalanceRaw > 0n && (
-        <div className="mb-4 sm:mb-5 bg-zinc-950 border border-red-500/30 rounded-2xl p-3.5 sm:p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-lg">
+        <div className="mb-4 sm:mb-5 bg-[#09110d] border border-emerald-500/30 rounded-2xl p-3.5 sm:p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-lg">
           <div className="flex items-center gap-2.5">
-            <span className="text-xl text-red-400">⚡</span>
+            <span className="text-xl text-emerald-400">⚡</span>
             <div>
               <p className="text-xs font-semibold text-zinc-200">
-                Detected <span className="text-red-400 font-mono font-bold">{wethBalanceFormatted} WETH</span>
+                Detected <span className="text-emerald-400 font-mono font-bold">{wethBalanceFormatted} WETH</span>
               </p>
               <p className="text-[11px] text-zinc-400">
                 Unwrap to combine directly into your Native ETH balance
@@ -147,12 +150,12 @@ export default function WalletCard({ onSend, onReceive, onSwap }: WalletCardProp
       )}
 
       {/* Native ETH Balance */}
-      <div className="mb-4 sm:mb-6 bg-zinc-950 p-4 sm:p-6 rounded-2xl border border-white/[0.07] relative overflow-hidden">
+      <div className="mb-4 sm:mb-6 bg-[#09110d]/80 p-4 sm:p-6 rounded-2xl border border-white/[0.07] relative overflow-hidden backdrop-blur-md">
         <div className="flex items-center justify-between mb-1.5 sm:mb-2">
           <span className="text-[11px] sm:text-xs text-zinc-400 uppercase tracking-wider font-semibold">
             Native ETH Balance
           </span>
-          <span className="text-[10px] sm:text-[11px] text-red-400/90 font-mono uppercase tracking-wider bg-red-500/10 px-2 py-0.5 rounded-md border border-red-500/20">
+          <span className="text-[10px] sm:text-[11px] text-emerald-400 font-mono uppercase tracking-wider bg-emerald-500/10 px-2 py-0.5 rounded-md border border-emerald-500/20">
             Layer-2 Orbit
           </span>
         </div>
@@ -160,7 +163,7 @@ export default function WalletCard({ onSend, onReceive, onSwap }: WalletCardProp
           <span className="text-3xl sm:text-5xl font-extrabold text-zinc-100 tracking-tight font-mono break-all">
             {balance ? balance.formatted : '0.000000'}
           </span>
-          <span className="text-base sm:text-lg text-red-500 font-bold font-mono">ETH</span>
+          <span className="text-base sm:text-lg text-emerald-400 font-bold font-mono">ETH</span>
         </div>
       </div>
 
@@ -172,7 +175,7 @@ export default function WalletCard({ onSend, onReceive, onSwap }: WalletCardProp
         {address ? (
           <div className="flex flex-col gap-2">
             <code
-              className="text-[11px] sm:text-xs font-mono text-zinc-300 bg-zinc-950 border border-white/[0.08] rounded-xl px-3.5 py-2.5 w-full overflow-hidden text-ellipsis select-all"
+              className="text-[11px] sm:text-xs font-mono text-zinc-300 bg-[#09110d] border border-white/[0.08] rounded-xl px-3.5 py-2.5 w-full overflow-hidden text-ellipsis select-all"
               title={address}
             >
               {address}
@@ -181,19 +184,19 @@ export default function WalletCard({ onSend, onReceive, onSwap }: WalletCardProp
               <button
                 onClick={copyAddress}
                 disabled={copying}
-                className="py-2 px-2 rounded-xl bg-zinc-950 hover:bg-zinc-900 border border-white/[0.08] text-zinc-300 hover:text-white transition-all flex items-center justify-center gap-1 text-[11px] font-medium cursor-pointer"
+                className="py-2 px-2 rounded-xl bg-[#09110d] hover:bg-zinc-800/80 border border-white/[0.08] text-zinc-300 hover:text-white transition-all flex items-center justify-center gap-1 text-[11px] font-medium cursor-pointer"
                 title="Copy Full Address"
               >
                 {copying ? (
                   <>
-                    <svg className="w-3.5 h-3.5 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg className="w-3.5 h-3.5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
-                    <span className="text-red-400 font-mono">Copied</span>
+                    <span className="text-emerald-400 font-mono">Copied</span>
                   </>
                 ) : (
                   <>
-                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg className="w-3.5 h-3.5 fill-none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
                     </svg>
                     <span>Copy</span>
@@ -204,17 +207,17 @@ export default function WalletCard({ onSend, onReceive, onSwap }: WalletCardProp
                 href={explorerUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="py-2 px-2 rounded-xl bg-zinc-950 hover:bg-zinc-900 border border-white/[0.08] text-zinc-300 hover:text-white transition-all flex items-center justify-center gap-1 text-[11px] font-medium"
+                className="py-2 px-2 rounded-xl bg-[#09110d] hover:bg-zinc-800/80 border border-white/[0.08] text-zinc-300 hover:text-white transition-all flex items-center justify-center gap-1 text-[11px] font-medium"
                 title="View on Explorer"
               >
-                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="w-3.5 h-3.5 fill-none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                 </svg>
                 <span>Explorer</span>
               </a>
               <button
                 onClick={() => exportWallet()}
-                className="py-2 px-2 rounded-xl bg-zinc-950 hover:bg-zinc-900 border border-white/[0.08] text-zinc-300 hover:text-amber-300 transition-all flex items-center justify-center gap-1 text-[11px] font-medium cursor-pointer"
+                className="py-2 px-2 rounded-xl bg-[#09110d] hover:bg-zinc-800/80 border border-white/[0.08] text-zinc-300 hover:text-amber-300 transition-all flex items-center justify-center gap-1 text-[11px] font-medium cursor-pointer"
                 title="Export Private Key (Self-Custody)"
               >
                 <svg className="w-3.5 h-3.5 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">

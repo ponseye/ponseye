@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
+import Image from 'next/image'
 
 interface TextStep {
   number: string
@@ -84,18 +85,37 @@ export default function FullscreenIntro({ onComplete }: FullscreenIntroProps) {
 
   return (
     <div
-      className={`fixed inset-0 z-50 flex flex-col items-center justify-between bg-black text-white px-6 py-12 sm:py-16 select-none overflow-hidden transition-all duration-700 ${
+      className={`fixed inset-0 z-50 flex flex-col items-center justify-between bg-[#030705] text-white px-6 py-12 sm:py-16 select-none overflow-hidden transition-all duration-700 ${
         isComplete ? 'opacity-0 scale-95 pointer-events-none' : 'opacity-100 scale-100'
       }`}
     >
-      {/* Background Soft Red Radial Glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[650px] bg-red-600/10 rounded-full blur-[170px] pointer-events-none" />
+      {/* Background Cosmic Emerald Eye Artwork Layer */}
+      <div
+        className="absolute inset-0 opacity-45 bg-center bg-cover bg-no-repeat pointer-events-none scale-105"
+        style={{
+          backgroundImage: 'url(/eye-bg.png)',
+          filter: 'contrast(120%) saturate(125%)',
+        }}
+      />
+
+      {/* Background Soft Emerald Radial Glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[750px] h-[750px] bg-emerald-500/20 rounded-full blur-[170px] pointer-events-none" />
+
+      {/* Vignette overlay */}
+      <div
+        className="absolute inset-0 opacity-70 pointer-events-none"
+        style={{
+          background: 'radial-gradient(ellipse 90% 80% at 50% 50%, transparent 20%, rgba(2, 6, 4, 0.92) 100%)',
+        }}
+      />
 
       {/* Top Header with Skip Button */}
       <div className="w-full flex justify-between items-center max-w-5xl mx-auto z-20 px-2">
-        <div className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-red-500" />
-          <span className="text-xs font-mono text-zinc-400 font-bold tracking-wider">PONSEye Terminal</span>
+        <div className="flex items-center gap-2.5">
+          <div className="w-6 h-6 rounded-lg overflow-hidden border border-emerald-500/30 flex items-center justify-center bg-black relative flex-shrink-0 shadow-md">
+            <Image src="/logo.svg" alt="PONSEye" width={24} height={24} className="object-cover" priority />
+          </div>
+          <span className="text-xs font-mono text-zinc-300 font-bold tracking-wider">PONSEye Terminal</span>
         </div>
         <button
           onClick={() => {
@@ -105,7 +125,7 @@ export default function FullscreenIntro({ onComplete }: FullscreenIntroProps) {
           className="text-xs font-mono text-zinc-300 hover:text-white bg-zinc-900/90 hover:bg-zinc-800 border border-white/10 px-3.5 py-1.5 rounded-full transition-all cursor-pointer shadow-lg flex items-center gap-1.5"
         >
           <span>Skip</span>
-          <span className="text-red-400">↗</span>
+          <span className="text-emerald-400">↗</span>
         </button>
       </div>
 
@@ -117,9 +137,11 @@ export default function FullscreenIntro({ onComplete }: FullscreenIntroProps) {
         }`}
       >
         {/* Kicker Pill */}
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-zinc-950/80 border border-white/[0.08] shadow-lg mb-6 sm:mb-8">
-          <span className="w-1.5 h-1.5 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.9)] animate-pulse" />
-          <span className="text-[11px] sm:text-xs font-mono font-bold tracking-[0.25em] text-zinc-300 uppercase">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#07100c]/80 border border-emerald-500/20 shadow-lg mb-6 sm:mb-8 backdrop-blur-md">
+          <div className="w-4 h-4 rounded-full overflow-hidden border border-emerald-400/40 shadow-[0_0_8px_rgba(16,185,129,0.9)] flex items-center justify-center bg-black relative flex-shrink-0">
+            <Image src="/logo.svg" alt="PONSEye" width={16} height={16} className="object-cover" />
+          </div>
+          <span className="text-[11px] sm:text-xs font-mono font-bold tracking-[0.25em] text-emerald-300 uppercase">
             {step.number} • {step.kicker}
           </span>
         </div>
@@ -129,7 +151,7 @@ export default function FullscreenIntro({ onComplete }: FullscreenIntroProps) {
           <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-[-0.04em] leading-none text-zinc-100 uppercase font-sans">
             {step.line1}
           </h1>
-          <h2 className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-[-0.04em] leading-none text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-red-400 to-rose-300 text-glow-red uppercase font-sans">
+          <h2 className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-[-0.04em] leading-none text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-200 text-glow-emerald uppercase font-sans">
             {step.line2}
           </h2>
         </div>
@@ -147,9 +169,9 @@ export default function FullscreenIntro({ onComplete }: FullscreenIntroProps) {
             key={s.number}
             className={`h-1 rounded-full transition-all duration-500 ${
               idx === index
-                ? 'w-7 bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.8)]'
+                ? 'w-7 bg-emerald-400 shadow-[0_0_10px_rgba(16,185,129,0.8)]'
                 : idx < index
-                ? 'w-2 bg-zinc-700'
+                ? 'w-2 bg-emerald-800/60'
                 : 'w-2 bg-zinc-900'
             }`}
           />

@@ -107,17 +107,17 @@ export default function HowItWorksAnimation() {
 
   return (
     <div
-      className="w-full flex flex-col gap-4 p-4 sm:p-5 rounded-2xl bg-black/70 backdrop-blur-xl border border-white/[0.08] shadow-2xl relative overflow-hidden text-left select-none"
+      className="w-full flex flex-col gap-4 p-4 sm:p-5 rounded-2xl bg-[#07100c]/70 backdrop-blur-xl border border-emerald-500/20 shadow-2xl relative overflow-hidden text-left select-none"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
       {/* Background Ambient Glow */}
-      <div className="absolute -top-12 -right-12 w-36 h-36 bg-red-600/10 rounded-full blur-2xl pointer-events-none" />
+      <div className="absolute -top-12 -right-12 w-36 h-36 bg-emerald-600/10 rounded-full blur-2xl pointer-events-none" />
 
       {/* Header with Title & Animated Progress Bar */}
-      <div className="flex items-center justify-between border-b border-white/[0.07] pb-3">
+      <div className="flex items-center justify-between border-b border-white/[0.08] pb-3">
         <div className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
           <span className="text-xs font-bold text-zinc-200 tracking-wide uppercase font-mono">
             How It Works
           </span>
@@ -129,7 +129,7 @@ export default function HowItWorksAnimation() {
               onClick={() => setActiveStep(idx)}
               className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
                 idx === activeStep
-                  ? 'w-6 bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.8)]'
+                  ? 'w-6 bg-emerald-400 shadow-[0_0_8px_rgba(16,185,129,0.8)]'
                   : 'w-2 bg-zinc-800 hover:bg-zinc-600'
               }`}
               title={`Step ${s.stepNumber}: ${s.title}`}
@@ -149,7 +149,7 @@ export default function HowItWorksAnimation() {
               onClick={() => setActiveStep(idx)}
               className={`flex items-center justify-center gap-1 py-1.5 px-1 rounded-lg border text-[11px] font-mono font-bold transition-all cursor-pointer ${
                 isActive
-                  ? 'bg-red-500/20 border-red-500/50 text-red-400 shadow-md shadow-red-950/40 scale-105'
+                  ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-300 shadow-md shadow-emerald-950/40 scale-105'
                   : isDone
                   ? 'bg-zinc-950 border-white/[0.1] text-zinc-300'
                   : 'bg-zinc-950/40 border-white/[0.04] text-zinc-600'
@@ -165,11 +165,11 @@ export default function HowItWorksAnimation() {
       {/* Animated Active Step Card */}
       <div
         key={activeStep}
-        className="flex flex-col gap-3 p-3.5 sm:p-4 rounded-xl bg-zinc-950/90 border border-red-500/25 shadow-lg relative overflow-hidden transition-all duration-300 animate-fadeIn"
+        className="flex flex-col gap-3 p-3.5 sm:p-4 rounded-xl bg-[#09110d]/90 backdrop-blur-md border border-emerald-500/30 shadow-lg relative overflow-hidden transition-all duration-300 animate-fadeIn"
       >
         {/* Step Badge & Icon */}
         <div className="flex items-center justify-between">
-          <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-500/15 text-red-400 border border-red-500/30 font-mono">
+          <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 font-mono">
             {current.badge}
           </span>
           <span className="text-xl">{current.icon}</span>
@@ -182,7 +182,7 @@ export default function HowItWorksAnimation() {
         </div>
 
         {/* Live Step Simulation Terminal Box */}
-        <div className="flex items-center gap-2.5 bg-black/90 border border-white/[0.08] p-2.5 rounded-lg text-xs font-mono">
+        <div className="flex items-center gap-2.5 bg-black/70 border border-white/[0.08] p-2.5 rounded-lg text-xs font-mono">
           <span className="text-sm flex-shrink-0">{current.previewIcon}</span>
           <div className="flex flex-col truncate">
             <span className="text-zinc-200 font-semibold text-[11px] truncate">

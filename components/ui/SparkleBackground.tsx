@@ -31,11 +31,11 @@ export default function SparkleBackground() {
     let height = (canvas.height = window.innerHeight)
 
     const colors = [
-      'rgba(255, 255, 255,',     // Bright white sparkle
-      'rgba(254, 202, 202,',     // Rose sparkle
-      'rgba(248, 113, 113,',     // Red sparkle
-      'rgba(252, 165, 165,',     // Soft coral sparkle
-      'rgba(255, 228, 230,',     // Soft pink-white
+      'rgba(255, 255, 255,',     // Crisp white sparkle
+      'rgba(209, 250, 229,',     // Mint sparkle
+      'rgba(167, 243, 208,',     // Soft emerald sparkle
+      'rgba(110, 231, 183,',     // Radiant jade sparkle
+      'rgba(240, 253, 250,',     // Frosted ice-teal
     ]
 
     const particleCount = Math.min(65, Math.floor((width * height) / 22000))
@@ -109,7 +109,7 @@ export default function SparkleBackground() {
       // Star gradient aura
       ctx.fillStyle = `${color}${alpha})`
       ctx.shadowBlur = 12
-      ctx.shadowColor = 'rgba(239, 68, 68, 0.8)'
+      ctx.shadowColor = 'rgba(16, 185, 129, 0.8)'
       ctx.fill()
       ctx.restore()
     }
@@ -154,7 +154,7 @@ export default function SparkleBackground() {
           ctx.strokeStyle = `${p.color}${p.alpha})`
           ctx.lineWidth = 0.75
           ctx.shadowBlur = 8
-          ctx.shadowColor = 'rgba(239, 68, 68, 0.9)'
+          ctx.shadowColor = 'rgba(52, 211, 153, 0.8)'
 
           const len = p.size * 3.5
           ctx.beginPath()
@@ -178,7 +178,7 @@ export default function SparkleBackground() {
           ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2)
           ctx.fillStyle = `${p.color}${p.alpha})`
           ctx.shadowBlur = 10
-          ctx.shadowColor = 'rgba(239, 68, 68, 0.6)'
+          ctx.shadowColor = 'rgba(16, 185, 129, 0.6)'
           ctx.fill()
           ctx.restore()
         }
@@ -197,43 +197,43 @@ export default function SparkleBackground() {
 
   return (
     <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden select-none">
-      {/* ── 1. Base Dark Slate Layer ────────────────────────────────────── */}
-      <div className="absolute inset-0 bg-[#060608]" />
+      {/* ── 1. Base Dark Emerald Slate Layer ────────────────────────────── */}
+      <div className="absolute inset-0 bg-[#030705]" />
 
-      {/* ── 2. Cinematic Crimson Red Gradient Glows (Matching Reference) ─── */}
-      {/* Massive bottom radiant crimson glow */}
+      {/* ── 2. Real Cosmic Emerald Eye Background Artwork ───────────────── */}
       <div
-        className="absolute -bottom-32 -left-20 -right-20 h-[650px] opacity-90 blur-3xl pointer-events-none"
+        className="absolute inset-0 opacity-40 bg-center bg-cover bg-no-repeat pointer-events-none scale-105"
         style={{
-          background:
-            'radial-gradient(ellipse 90% 70% at 50% 100%, #dc2626 0%, #991b1b 35%, #450a0a 70%, transparent 100%)',
+          backgroundImage: 'url(/eye-bg.png)',
+          filter: 'contrast(115%) saturate(120%)',
         }}
       />
 
-      {/* Radiant bottom-right crimson flare */}
+      {/* ── 3. Atmospheric Radiant Emerald & Jade Glows ─────────────────── */}
+      {/* Center radiant emerald bloom around the eye */}
       <div
-        className="absolute bottom-0 right-0 w-[600px] h-[550px] opacity-80 blur-3xl pointer-events-none"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[850px] h-[850px] opacity-45 blur-3xl pointer-events-none"
         style={{
           background:
-            'radial-gradient(circle at 85% 85%, #ef4444 0%, #b91c1c 45%, #7f1d1d 75%, transparent 100%)',
+            'radial-gradient(circle, rgba(16, 185, 129, 0.45) 0%, rgba(5, 150, 105, 0.25) 45%, transparent 75%)',
         }}
       />
 
-      {/* Soft center atmospheric ambient glow */}
+      {/* Bottom atmospheric teal/emerald horizon */}
       <div
-        className="absolute top-1/2 -left-20 w-[450px] h-[450px] opacity-35 blur-3xl pointer-events-none"
+        className="absolute -bottom-32 -left-20 -right-20 h-[650px] opacity-75 blur-3xl pointer-events-none"
         style={{
           background:
-            'radial-gradient(circle, #7f1d1d 0%, #450a0a 50%, transparent 80%)',
+            'radial-gradient(ellipse 90% 70% at 50% 100%, #059669 0%, #064e3b 40%, #022c22 75%, transparent 100%)',
         }}
       />
 
-      {/* Vignette overlay for rich contrast */}
+      {/* Vignette overlay for rich contrast & Apple glass focus */}
       <div
-        className="absolute inset-0 opacity-60 pointer-events-none"
+        className="absolute inset-0 opacity-75 pointer-events-none"
         style={{
           background:
-            'radial-gradient(ellipse 100% 100% at 50% 30%, transparent 40%, rgba(0,0,0,0.85) 100%)',
+            'radial-gradient(ellipse 95% 85% at 50% 45%, transparent 35%, rgba(2, 6, 4, 0.92) 100%)',
         }}
       />
 
@@ -247,7 +247,7 @@ export default function SparkleBackground() {
         }}
       />
 
-      {/* ── 3. Sparkling Particle Canvas Layer ───────────────────────────── */}
+      {/* ── 4. Sparkling Particle Canvas Layer ───────────────────────────── */}
       <canvas
         ref={canvasRef}
         className="absolute inset-0 w-full h-full pointer-events-none"

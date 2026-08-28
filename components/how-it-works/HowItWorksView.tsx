@@ -1,6 +1,7 @@
 'use client'
 
 import Button from '@/components/ui/Button'
+import Image from 'next/image'
 
 interface HowItWorksViewProps {
   onGoToDashboard: () => void
@@ -53,19 +54,24 @@ export default function HowItWorksView({
   return (
     <div className="flex flex-col gap-8 w-full max-w-3xl mx-auto pb-16">
       {/* Hero Banner */}
-      <div className="rounded-3xl bg-[#09090b] border border-white/[0.08] p-6 sm:p-8 shadow-2xl relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-red-600/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="rounded-3xl bg-[#07100c]/75 backdrop-blur-xl border border-emerald-500/20 p-6 sm:p-8 shadow-2xl relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-600/10 rounded-full blur-3xl pointer-events-none" />
 
-        <div className="flex items-center gap-2 mb-3">
-          <span className="px-3 py-1 rounded-full text-xs font-semibold bg-red-500/10 text-red-400 border border-red-500/20 font-mono">
-            Robinhood Chain L2
-          </span>
-          <span className="px-3 py-1 rounded-full text-xs font-semibold bg-zinc-900 text-zinc-300 border border-white/[0.08] font-mono">
-            Non-Custodial
-          </span>
+        <div className="flex items-center gap-3 mb-3">
+          <div className="w-10 h-10 rounded-xl overflow-hidden border border-emerald-500/30 flex items-center justify-center bg-black relative flex-shrink-0 shadow-lg">
+            <Image src="/logo.svg" alt="PONSEye" width={40} height={40} className="object-cover" priority />
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono">
+              Robinhood Chain L2
+            </span>
+            <span className="px-3 py-1 rounded-full text-xs font-semibold bg-[#09110d] text-zinc-300 border border-white/[0.08] font-mono">
+              Non-Custodial
+            </span>
+          </div>
         </div>
         <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-          How PONS<span className="text-red-500">EYE</span> Works
+          How PONS<span className="text-emerald-400">EYE</span> Works
         </h1>
         <p className="text-zinc-400 text-sm sm:text-base mt-2 leading-relaxed">
           The fastest non-custodial token sniping and portfolio management platform on Robinhood Chain. Monitor crypto alpha and execute instant DEX swaps the moment contracts are posted.
@@ -88,14 +94,14 @@ export default function HowItWorksView({
           {steps.map((s) => (
             <div
               key={s.step}
-              className="flex items-start gap-4 p-5 rounded-2xl bg-[#09090b] border border-white/[0.07] hover:border-white/[0.12] transition-colors shadow-lg"
+              className="flex items-start gap-4 p-5 rounded-2xl bg-[#07100c]/70 backdrop-blur-md border border-white/[0.07] hover:border-emerald-500/30 transition-colors shadow-lg"
             >
-              <div className="w-11 h-11 rounded-xl bg-zinc-950 border border-white/[0.08] flex items-center justify-center text-xl flex-shrink-0">
+              <div className="w-11 h-11 rounded-xl bg-[#09110d] border border-white/[0.08] flex items-center justify-center text-xl flex-shrink-0">
                 {s.icon}
               </div>
               <div className="flex-1">
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-mono font-bold text-red-500">
+                  <span className="text-xs font-mono font-bold text-emerald-400">
                     Step {s.step}
                   </span>
                   <h3 className="text-sm sm:text-base font-bold text-zinc-100">{s.title}</h3>

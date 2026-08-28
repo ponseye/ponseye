@@ -1,11 +1,11 @@
 @import "tailwindcss";
 
 :root {
-  --background: #000000;
+  --background: #050807;
   --foreground: #f4f4f5;
-  --accent: #ef4444;
-  --accent-hover: #dc2626;
-  --surface: #09090b;
+  --accent: #10b981;
+  --accent-hover: #059669;
+  --surface: #070d0a;
   --surface-border: rgba(255, 255, 255, 0.08);
 }
 
@@ -18,7 +18,7 @@
 }
 
 body {
-  background: #000000;
+  background: #050807;
   color: #f4f4f5;
   font-family: var(--font-sans);
   min-height: 100vh;
@@ -32,16 +32,16 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #09090b;
+  background: rgba(0, 0, 0, 0.4);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #27272a;
+  background: rgba(255, 255, 255, 0.15);
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #ef4444;
+  background: #10b981;
 }
 
 /* Cinematic text animations */
@@ -82,23 +82,38 @@ body {
   animation: cinematicOut 0.6s cubic-bezier(0.7, 0, 0.84, 0) forwards;
 }
 
-/* Subtle red glows & utility classes */
-.glow-red {
-  box-shadow: 0 0 25px -5px rgba(239, 68, 68, 0.25);
+/* Apple Frosted Glass & Emerald Glow Utilities */
+.glass-panel {
+  background: rgba(10, 20, 16, 0.65);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(16, 185, 129, 0.04);
 }
 
-.glow-red-sm {
-  box-shadow: 0 0 15px -3px rgba(239, 68, 68, 0.15);
+.glass-card {
+  background: rgba(15, 28, 22, 0.5);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
 }
 
-.text-glow-red {
-  text-shadow: 0 0 30px rgba(239, 68, 68, 0.6), 0 0 60px rgba(239, 68, 68, 0.25);
+.glow-emerald {
+  box-shadow: 0 0 25px -5px rgba(16, 185, 129, 0.3);
+}
+
+.glow-emerald-sm {
+  box-shadow: 0 0 15px -3px rgba(16, 185, 129, 0.18);
+}
+
+.text-glow-emerald {
+  text-shadow: 0 0 30px rgba(16, 185, 129, 0.6), 0 0 60px rgba(52, 211, 153, 0.3);
 }
 
 .border-subtle {
   border-color: rgba(255, 255, 255, 0.07);
 }
 
-.border-subtle-red {
-  border-color: rgba(239, 68, 68, 0.2);
+.border-subtle-emerald {
+  border-color: rgba(16, 185, 129, 0.2);
 }

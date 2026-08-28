@@ -29,7 +29,7 @@ export default function WalletView() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/[0.08] pb-5">
         <div>
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
             <h1 className="text-xl sm:text-2xl font-bold text-zinc-100 tracking-tight">
               Wallet & Token Portfolio
             </h1>
@@ -39,8 +39,8 @@ export default function WalletView() {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-zinc-900 border border-white/[0.08] text-zinc-300 font-mono">
-            <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-[#09110d] border border-white/[0.08] text-zinc-300 font-mono">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
             Robinhood Chain (4663)
           </span>
         </div>

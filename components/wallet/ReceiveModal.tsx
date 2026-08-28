@@ -43,7 +43,7 @@ export default function ReceiveModal({ open, onClose }: ReceiveModalProps) {
             />
           ) : (
             <div className="w-[180px] h-[180px] flex items-center justify-center">
-              <div className="w-8 h-8 animate-spin rounded-full border-2 border-zinc-300 border-t-red-500" />
+              <div className="w-8 h-8 animate-spin rounded-full border-2 border-zinc-300 border-t-emerald-500" />
             </div>
           )}
         </div>
@@ -59,17 +59,17 @@ export default function ReceiveModal({ open, onClose }: ReceiveModalProps) {
             <p className="text-[11px] text-zinc-400 mb-1.5 text-center uppercase tracking-wider font-semibold">
               Account Address
             </p>
-            <div className="flex items-center gap-2 bg-zinc-950 rounded-xl p-3 border border-white/[0.08]">
+            <div className="flex items-center gap-2 bg-[#09110d] rounded-xl p-3 border border-white/[0.08]">
               <code className="text-xs font-mono text-zinc-300 flex-1 break-all text-center">
                 {shortenAddress(address)}
               </code>
               <button
                 onClick={copyAddress}
-                className="flex-shrink-0 p-1.5 rounded-lg hover:bg-zinc-800 text-zinc-400 hover:text-white transition-all"
+                className="flex-shrink-0 p-1.5 rounded-lg hover:bg-zinc-800 text-zinc-400 hover:text-emerald-400 transition-all"
                 title="Copy Address"
               >
                 {copying ? (
-                  <svg className="w-4 h-4 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg className="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
                 ) : (

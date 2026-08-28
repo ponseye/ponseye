@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import { useSniper } from '@/hooks/useSniper'
 import { activeChain } from '@/lib/chains'
 import Button from '@/components/ui/Button'
@@ -45,12 +46,15 @@ export default function TwitterFeed({ onOpenSwap, onOpenTelegram }: TwitterFeedP
   return (
     <div className="flex flex-col gap-5 sm:gap-6 w-full">
       {/* Header & Target Management Bar */}
-      <div className="flex flex-col gap-4 bg-[#09090b]/90 backdrop-blur-xl border border-white/[0.08] p-4 sm:p-7 rounded-3xl shadow-2xl">
+      <div className="flex flex-col gap-4 bg-[#07100c]/75 backdrop-blur-xl border border-emerald-500/15 p-4 sm:p-7 rounded-3xl shadow-2xl">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h2 className="text-base sm:text-lg font-bold text-zinc-100 flex items-center gap-2.5">
-              <span>🎯 Monitored Target Accounts</span>
-              <span className="text-xs font-semibold text-red-400 bg-red-500/10 px-2.5 py-0.5 rounded-full border border-red-500/20 font-mono">
+              <div className="w-5 h-5 rounded-md overflow-hidden border border-emerald-500/30 flex items-center justify-center bg-black relative flex-shrink-0">
+                <Image src="/logo.svg" alt="Target" width={20} height={20} className="object-cover" />
+              </div>
+              <span>Monitored Target Accounts</span>
+              <span className="text-xs font-semibold text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20 font-mono">
                 {targets.length} {targets.length === 1 ? 'Target' : 'Targets'}
               </span>
             </h2>
@@ -65,9 +69,9 @@ export default function TwitterFeed({ onOpenSwap, onOpenTelegram }: TwitterFeedP
                 size="sm"
                 variant="secondary"
                 onClick={onOpenTelegram}
-                className="flex-1 sm:flex-none gap-2 text-xs sm:text-sm font-semibold py-2.5 px-3 border-white/[0.12] hover:border-blue-500/40"
+                className="flex-1 sm:flex-none gap-2 text-xs sm:text-sm font-semibold py-2.5 px-3 border-white/[0.12] hover:border-emerald-500/40"
               >
-                <svg className="w-3.5 h-3.5 text-blue-400" viewBox="0 0 24 24" fill="currentColor">
+                <svg className="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.75-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .37z"/>
                 </svg>
                 <span>Telegram Bot</span>
@@ -91,7 +95,7 @@ export default function TwitterFeed({ onOpenSwap, onOpenTelegram }: TwitterFeedP
             {targets.map((t) => (
               <div
                 key={t.id}
-                className="flex items-center gap-2 bg-zinc-950 border border-white/[0.08] rounded-xl px-2.5 sm:px-3 py-1.5 text-xs shadow-sm"
+                className="flex items-center gap-2 bg-[#09110d] border border-white/[0.08] hover:border-emerald-500/30 rounded-xl px-2.5 sm:px-3 py-1.5 text-xs shadow-sm transition-all"
               >
                 {/* Target Avatar / Profile Image */}
                 <div className="relative flex-shrink-0">
@@ -111,7 +115,7 @@ export default function TwitterFeed({ onOpenSwap, onOpenTelegram }: TwitterFeedP
                     onClick={() => toggleTarget(t.id)}
                     className={`absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full border border-black transition-all cursor-pointer ${
                       t.enabled
-                        ? 'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.9)]'
+                        ? 'bg-emerald-400 shadow-[0_0_8px_rgba(16,185,129,0.9)]'
                         : 'bg-zinc-700'
                     }`}
                     title={t.enabled ? 'Target Active' : 'Target Paused'}
@@ -119,12 +123,12 @@ export default function TwitterFeed({ onOpenSwap, onOpenTelegram }: TwitterFeedP
                 </div>
 
                 <span className="font-bold text-zinc-100 font-mono text-xs sm:text-sm">@{t.username}</span>
-                <span className="text-xs text-red-400 font-mono font-semibold">
+                <span className="text-xs text-emerald-400 font-mono font-semibold">
                   ({t.buyAmountEth} ETH)
                 </span>
                 <button
                   onClick={() => removeTarget(t.id)}
-                  className="text-zinc-500 hover:text-red-400 transition-colors ml-0.5 p-1 cursor-pointer"
+                  className="text-zinc-500 hover:text-emerald-300 transition-colors ml-0.5 p-1 cursor-pointer"
                   title="Remove target"
                 >
                   <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -138,15 +142,17 @@ export default function TwitterFeed({ onOpenSwap, onOpenTelegram }: TwitterFeedP
       </div>
 
       {/* Tweet Feed Section - Mobile Responsive Frame */}
-      <div className="flex flex-col bg-[#09090b]/90 backdrop-blur-xl border border-white/[0.08] rounded-3xl shadow-2xl overflow-hidden h-[540px] sm:h-[660px] xl:h-[760px] w-full flex-shrink-0">
+      <div className="flex flex-col bg-[#07100c]/75 backdrop-blur-xl border border-emerald-500/15 rounded-3xl shadow-2xl overflow-hidden h-[540px] sm:h-[660px] xl:h-[760px] w-full flex-shrink-0">
         {/* Frame Header */}
-        <div className="flex items-center justify-between px-4 sm:px-6 py-3.5 sm:py-4 border-b border-white/[0.07] bg-zinc-950/60 flex-shrink-0">
+        <div className="flex items-center justify-between px-4 sm:px-6 py-3.5 sm:py-4 border-b border-white/[0.08] bg-[#09110d]/60 flex-shrink-0">
           <div className="flex items-center gap-2.5">
-            <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+            <div className="w-4 h-4 rounded-md overflow-hidden border border-emerald-500/30 flex items-center justify-center bg-black relative flex-shrink-0">
+              <Image src="/logo.svg" alt="Feed" width={16} height={16} className="object-cover" />
+            </div>
             <h3 className="text-sm sm:text-base font-bold text-zinc-100 flex items-center gap-2">
-              <span>📡 Live Post Feed</span>
+              <span>Live Post Feed</span>
               {feed.length > 0 && (
-                <span className="text-[11px] sm:text-xs text-zinc-500 font-normal font-mono bg-zinc-900 border border-white/[0.06] px-2 py-0.5 rounded-full">
+                <span className="text-[11px] sm:text-xs text-emerald-400 font-normal font-mono bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full">
                   {feed.length} {feed.length === 1 ? 'post' : 'posts'}
                 </span>
               )}
@@ -155,7 +161,7 @@ export default function TwitterFeed({ onOpenSwap, onOpenTelegram }: TwitterFeedP
           {feed.length > 0 && (
             <button
               onClick={clearFeed}
-              className="text-xs text-zinc-500 hover:text-red-400 transition-colors cursor-pointer font-medium"
+              className="text-xs text-zinc-500 hover:text-emerald-300 transition-colors cursor-pointer font-medium"
             >
               Clear Feed
             </button>
@@ -167,8 +173,8 @@ export default function TwitterFeed({ onOpenSwap, onOpenTelegram }: TwitterFeedP
           {feed.length === 0 ? (
             /* Empty Feed State centered within frame */
             <div className="flex flex-col items-center justify-center flex-1 my-auto p-6 sm:p-8 text-center gap-4">
-              <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-zinc-950 border border-white/[0.08] flex items-center justify-center text-2xl sm:text-3xl shadow-xl">
-                🎯
+              <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-[#09110d] border border-emerald-500/30 flex items-center justify-center shadow-xl p-2 relative overflow-hidden">
+                <Image src="/logo.svg" alt="PONSEye" width={56} height={56} className="object-cover rounded-xl" />
               </div>
               <div className="max-w-md">
                 <p className="text-sm sm:text-lg font-bold text-zinc-100">
@@ -209,8 +215,8 @@ export default function TwitterFeed({ onOpenSwap, onOpenTelegram }: TwitterFeedP
                   key={item.id}
                   className={`flex flex-col gap-3 p-3.5 sm:p-5 rounded-2xl border transition-all ${
                     hasCa
-                      ? 'bg-zinc-950/90 border-red-500/30 shadow-xl'
-                      : 'bg-zinc-950/60 border-white/[0.06] hover:border-white/[0.10]'
+                      ? 'bg-[#09150f]/90 border-emerald-500/40 shadow-xl glow-emerald-sm'
+                      : 'bg-[#09110d]/60 border-white/[0.06] hover:border-emerald-500/20'
                   }`}
                 >
                   {/* Author Info & Date */}
@@ -232,7 +238,7 @@ export default function TwitterFeed({ onOpenSwap, onOpenTelegram }: TwitterFeedP
                           </span>
                           <span className="text-[11px] sm:text-xs text-zinc-400 font-mono">@{item.username}</span>
                           {hasCa && (
-                            <span className="bg-red-500/10 text-red-400 border border-red-500/20 px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold tracking-wider font-mono">
+                            <span className="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold tracking-wider font-mono">
                               🎯 CA DETECTED
                             </span>
                           )}
@@ -269,16 +275,16 @@ export default function TwitterFeed({ onOpenSwap, onOpenTelegram }: TwitterFeedP
 
                   {/* CA Detection & Auto-Buy Action Box */}
                   {hasCa && firstCa && (
-                    <div className="ml-0 sm:ml-13 mt-1 bg-black/80 border border-red-500/20 rounded-2xl p-3 sm:p-4 flex flex-col gap-2.5 sm:gap-3 shadow-xl">
+                    <div className="ml-0 sm:ml-13 mt-1 bg-[#050b08]/90 border border-emerald-500/30 rounded-2xl p-3 sm:p-4 flex flex-col gap-2.5 sm:gap-3 shadow-xl">
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
                         <div className="flex items-center gap-2 flex-wrap">
                           <span className="text-[11px] sm:text-xs font-semibold text-zinc-400">Token CA:</span>
-                          <code className="text-[11px] sm:text-xs font-mono font-bold text-zinc-200 bg-zinc-950 border border-white/[0.08] px-2 py-0.5 rounded-lg break-all">
+                          <code className="text-[11px] sm:text-xs font-mono font-bold text-emerald-300 bg-black/60 border border-emerald-500/20 px-2 py-0.5 rounded-lg break-all">
                             {firstCa.slice(0, 8)}...{firstCa.slice(-6)}
                           </code>
                           <button
                             onClick={() => copyToClipboard(firstCa)}
-                            className="text-zinc-400 hover:text-white p-1 rounded-md hover:bg-zinc-800 transition-colors cursor-pointer"
+                            className="text-zinc-400 hover:text-emerald-300 p-1 rounded-md hover:bg-emerald-950/40 transition-colors cursor-pointer"
                             title="Copy CA"
                           >
                             <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -308,7 +314,7 @@ export default function TwitterFeed({ onOpenSwap, onOpenTelegram }: TwitterFeedP
                             href={`${activeChain.blockExplorers.default.url}/tx/${item.txHash}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-red-400 hover:text-red-300 font-medium underline flex items-center gap-1 truncate max-w-[220px] sm:max-w-none"
+                            className="text-emerald-400 hover:text-emerald-300 font-medium underline flex items-center gap-1 truncate max-w-[220px] sm:max-w-none"
                           >
                             View on Blockscout →
                           </a>
@@ -340,7 +346,7 @@ export default function TwitterFeed({ onOpenSwap, onOpenTelegram }: TwitterFeedP
                 value={usernameInput}
                 onChange={(e) => setUsernameInput(e.target.value)}
                 placeholder="elonmusk"
-                className="w-full bg-zinc-950 border border-white/[0.08] rounded-xl pl-8 pr-4 py-2.5 text-xs text-white placeholder-zinc-600 focus:outline-none focus:ring-1 focus:ring-red-500/50 font-mono"
+                className="w-full bg-[#050b08] border border-white/[0.08] focus:border-emerald-500/50 rounded-xl pl-8 pr-4 py-2.5 text-xs text-white placeholder-zinc-600 focus:outline-none focus:ring-1 focus:ring-emerald-500/50 font-mono"
               />
             </div>
           </div>
@@ -355,7 +361,7 @@ export default function TwitterFeed({ onOpenSwap, onOpenTelegram }: TwitterFeedP
               value={buyAmountInput}
               onChange={(e) => setBuyAmountInput(e.target.value)}
               placeholder="0.005"
-              className="w-full bg-zinc-950 border border-white/[0.08] rounded-xl px-4 py-2.5 text-xs text-white placeholder-zinc-600 focus:outline-none focus:ring-1 focus:ring-red-500/50 font-mono"
+              className="w-full bg-[#050b08] border border-white/[0.08] focus:border-emerald-500/50 rounded-xl px-4 py-2.5 text-xs text-white placeholder-zinc-600 focus:outline-none focus:ring-1 focus:ring-emerald-500/50 font-mono"
             />
             <p className="text-[11px] text-zinc-500 mt-1">
               The amount of Native ETH automatically allocated when a new CA is published.

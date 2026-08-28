@@ -42,7 +42,7 @@ export default function Providers({ children }: { children: ReactNode }) {
       config={{
         appearance: {
           theme: 'dark',
-          accentColor: '#ef4444',
+          accentColor: '#10b981',
         },
         embeddedWallets: {
           showWalletUIs: false,
@@ -62,13 +62,13 @@ export default function Providers({ children }: { children: ReactNode }) {
             position="top-center"
             toastOptions={{
               style: {
-                background: '#09090b',
+                background: '#09110d',
                 color: '#f4f4f5',
-                border: '1px solid rgba(255, 255, 255, 0.12)',
+                border: '1px solid rgba(16, 185, 129, 0.25)',
                 borderRadius: '16px',
                 fontSize: '13px',
                 padding: '12px 18px',
-                boxShadow: '0 20px 40px rgba(0,0,0,0.8), 0 0 20px rgba(239,68,68,0.15)',
+                boxShadow: '0 20px 40px rgba(0,0,0,0.8), 0 0 20px rgba(16, 185, 129, 0.2)',
               },
             }}
           />

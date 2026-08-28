@@ -28,9 +28,9 @@ export default function Modal({ open, onClose, title, children }: ModalProps) {
         onClick={onClose}
       />
       {/* Panel */}
-      <div className="relative w-full max-w-md max-h-[92vh] flex flex-col rounded-2xl bg-[#09090b] border border-white/[0.08] shadow-2xl shadow-black/80 p-4 sm:p-6 glow-red-sm overflow-hidden">
-        {/* Subtle red accent top line */}
-        <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-red-500/60 to-transparent flex-shrink-0" />
+      <div className="relative w-full max-w-md max-h-[92vh] flex flex-col rounded-2xl bg-[#09110d]/90 backdrop-blur-2xl border border-emerald-500/20 shadow-2xl shadow-black/80 p-4 sm:p-6 glow-emerald-sm overflow-hidden">
+        {/* Subtle emerald accent top line */}
+        <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-emerald-400/60 to-transparent flex-shrink-0" />
         
         <div className="flex items-center justify-between mb-3.5 sm:mb-5 flex-shrink-0">
           <h2 className="text-sm sm:text-base font-semibold tracking-tight text-zinc-100">{title}</h2>

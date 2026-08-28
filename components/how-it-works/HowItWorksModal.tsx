@@ -2,6 +2,7 @@
 
 import Modal from '@/components/ui/Modal'
 import Button from '@/components/ui/Button'
+import Image from 'next/image'
 
 interface HowItWorksModalProps {
   open: boolean
@@ -51,9 +52,12 @@ export default function HowItWorksModal({ open, onClose }: HowItWorksModalProps)
   return (
     <Modal open={open} onClose={onClose} title="How PONSEYE Works">
       <div className="flex flex-col gap-4 max-h-[75vh] overflow-y-auto pr-1">
-        <div className="p-4 rounded-2xl bg-zinc-950 border border-white/[0.08] relative overflow-hidden">
-          <div className="flex items-center gap-2 mb-2">
-            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-red-500/10 text-red-400 border border-red-500/20 font-mono">
+        <div className="p-4 rounded-2xl bg-[#09110d] border border-white/[0.08] relative overflow-hidden">
+          <div className="flex items-center gap-2.5 mb-2">
+            <div className="w-6 h-6 rounded-lg overflow-hidden border border-emerald-500/30 flex items-center justify-center bg-black relative flex-shrink-0">
+              <Image src="/logo.svg" alt="PONSEye" width={24} height={24} className="object-cover" />
+            </div>
+            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono">
               Robinhood Chain (4663)
             </span>
             <span className="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-zinc-900 text-zinc-300 border border-white/[0.08] font-mono">
@@ -69,14 +73,14 @@ export default function HowItWorksModal({ open, onClose }: HowItWorksModalProps)
           {steps.map((s) => (
             <div
               key={s.step}
-              className="flex items-start gap-3 p-3.5 rounded-xl bg-zinc-950/80 border border-white/[0.06] hover:border-white/[0.12] transition-colors"
+              className="flex items-start gap-3 p-3.5 rounded-xl bg-[#09110d]/80 border border-white/[0.06] hover:border-emerald-500/30 transition-colors"
             >
               <div className="w-8 h-8 rounded-lg bg-black border border-white/[0.08] flex items-center justify-center text-sm flex-shrink-0">
                 {s.icon}
               </div>
               <div className="flex-1">
                 <div className="flex items-center gap-2">
-                  <span className="text-[10px] font-mono font-bold text-red-500">
+                  <span className="text-[10px] font-mono font-bold text-emerald-400">
                     {s.step}
                   </span>
                   <h4 className="text-xs font-bold text-zinc-100">{s.title}</h4>

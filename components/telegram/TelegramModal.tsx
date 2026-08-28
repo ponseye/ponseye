@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Image from 'next/image'
 import Modal from '@/components/ui/Modal'
 import Button from '@/components/ui/Button'
 import { useTelegram } from '@/hooks/useTelegram'
@@ -123,15 +124,15 @@ export default function TelegramModal({ open, onClose }: TelegramModalProps) {
     <Modal open={open} onClose={onClose} title="Telegram Bot & Auto-Alerts">
       <form onSubmit={handleSave} className="flex flex-col gap-5 max-h-[80vh] overflow-y-auto pr-1">
         {/* Connected Identity Info Banner */}
-        <div className="bg-zinc-950 border border-white/[0.08] rounded-2xl p-3.5 flex items-center justify-between gap-3 text-xs">
+        <div className="bg-[#09110d] border border-white/[0.08] rounded-2xl p-3.5 flex items-center justify-between gap-3 text-xs">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-400 font-bold text-sm">
-              𝕏
+            <div className="w-8 h-8 rounded-xl overflow-hidden border border-emerald-500/30 flex items-center justify-center bg-black relative flex-shrink-0">
+              <Image src="/logo.svg" alt="PONSEye" width={32} height={32} className="object-cover" />
             </div>
             <div>
               <div className="text-zinc-200 font-semibold flex items-center gap-1.5">
                 <span>{twitterHandle}</span>
-                <span className="text-[10px] bg-red-500/10 text-red-400 px-1.5 py-0.5 rounded font-mono">
+                <span className="text-[10px] bg-emerald-500/10 text-emerald-400 px-1.5 py-0.5 rounded font-mono">
                   Robinhood Chain
                 </span>
               </div>
@@ -160,7 +161,7 @@ export default function TelegramModal({ open, onClose }: TelegramModalProps) {
         </div>
 
         {/* Master Activation Toggle */}
-        <div className="flex items-center justify-between p-4 rounded-2xl bg-zinc-900/60 border border-white/[0.08]">
+        <div className="flex items-center justify-between p-4 rounded-2xl bg-[#09110d]/80 border border-white/[0.08] backdrop-blur-md">
           <div className="flex flex-col gap-0.5">
             <span className="text-xs font-bold text-zinc-100 flex items-center gap-2">
               <span>Enable Telegram Notifications</span>
@@ -173,7 +174,7 @@ export default function TelegramModal({ open, onClose }: TelegramModalProps) {
             type="button"
             onClick={() => setEnabled(!enabled)}
             className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors cursor-pointer ${
-              enabled ? 'bg-red-500' : 'bg-zinc-800'
+              enabled ? 'bg-emerald-500' : 'bg-zinc-800'
             }`}
           >
             <span
@@ -188,13 +189,13 @@ export default function TelegramModal({ open, onClose }: TelegramModalProps) {
         <div className="flex flex-col gap-1.5">
           <div className="flex items-center justify-between">
             <label className="text-xs font-semibold text-zinc-300">
-              1. Telegram Bot Token <span className="text-red-400">*</span>
+              1. Telegram Bot Token <span className="text-emerald-400">*</span>
             </label>
             <a
               href="https://t.me/BotFather"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[11px] text-red-400 hover:text-red-300 underline flex items-center gap-1"
+              className="text-[11px] text-emerald-400 hover:text-emerald-300 underline flex items-center gap-1"
             >
               Create bot via @BotFather ↗
             </a>
@@ -209,7 +210,7 @@ export default function TelegramModal({ open, onClose }: TelegramModalProps) {
                 setBotUsername('')
               }}
               placeholder="123456789:ABCdefGHIjklMNOpqrSTUvwxYZ..."
-              className="flex-1 bg-zinc-950 border border-white/[0.08] rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-zinc-600 focus:outline-none focus:ring-1 focus:ring-red-500/50 font-mono"
+              className="flex-1 bg-[#050b08] border border-white/[0.08] focus:border-emerald-500/50 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-zinc-600 focus:outline-none focus:ring-1 focus:ring-emerald-500/50 font-mono"
             />
             <Button
               type="button"
@@ -239,14 +240,14 @@ export default function TelegramModal({ open, onClose }: TelegramModalProps) {
         <div className="flex flex-col gap-1.5">
           <div className="flex items-center justify-between">
             <label className="text-xs font-semibold text-zinc-300">
-              2. Your Telegram Chat ID <span className="text-red-400">*</span>
+              2. Your Telegram Chat ID <span className="text-emerald-400">*</span>
             </label>
             {botUsername && (
               <a
                 href={`https://t.me/${botUsername}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[11px] text-red-400 hover:text-red-300 underline"
+                className="text-[11px] text-emerald-400 hover:text-emerald-300 underline"
               >
                 1. Click to Open Bot & Send /start ↗
               </a>
@@ -259,7 +260,7 @@ export default function TelegramModal({ open, onClose }: TelegramModalProps) {
               value={chatId}
               onChange={(e) => setChatId(e.target.value)}
               placeholder="e.g. 123456789"
-              className="flex-1 bg-zinc-950 border border-white/[0.08] rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-zinc-600 focus:outline-none focus:ring-1 focus:ring-red-500/50 font-mono"
+              className="flex-1 bg-[#050b08] border border-white/[0.08] focus:border-emerald-500/50 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-zinc-600 focus:outline-none focus:ring-1 focus:ring-emerald-500/50 font-mono"
             />
             <Button
               type="button"
@@ -282,13 +283,13 @@ export default function TelegramModal({ open, onClose }: TelegramModalProps) {
         <div className="flex flex-col gap-2.5 pt-2 border-t border-white/[0.06]">
           <span className="text-xs font-semibold text-zinc-300">Notification Triggers</span>
 
-          <div className="flex flex-col gap-2 bg-zinc-950/80 p-3 rounded-xl border border-white/[0.06]">
+          <div className="flex flex-col gap-2 bg-[#09110d]/80 p-3 rounded-xl border border-white/[0.06]">
             <label className="flex items-center gap-2.5 cursor-pointer text-xs text-zinc-300">
               <input
                 type="checkbox"
                 checked={notifyOnDetected}
                 onChange={(e) => setNotifyOnDetected(e.target.checked)}
-                className="rounded border-zinc-700 bg-zinc-900 text-red-500 focus:ring-red-500/30 w-4 h-4"
+                className="rounded border-zinc-700 bg-zinc-900 text-emerald-500 focus:ring-emerald-500/30 w-4 h-4"
               />
               <span>Alert when a new token CA is detected in tweets</span>
             </label>
@@ -298,7 +299,7 @@ export default function TelegramModal({ open, onClose }: TelegramModalProps) {
                 type="checkbox"
                 checked={notifyOnSuccess}
                 onChange={(e) => setNotifyOnSuccess(e.target.checked)}
-                className="rounded border-zinc-700 bg-zinc-900 text-red-500 focus:ring-red-500/30 w-4 h-4"
+                className="rounded border-zinc-700 bg-zinc-900 text-emerald-500 focus:ring-emerald-500/30 w-4 h-4"
               />
               <span>Alert when Auto-Buy transaction succeeds (with Blockscout link)</span>
             </label>
@@ -308,7 +309,7 @@ export default function TelegramModal({ open, onClose }: TelegramModalProps) {
                 type="checkbox"
                 checked={notifyOnFailed}
                 onChange={(e) => setNotifyOnFailed(e.target.checked)}
-                className="rounded border-zinc-700 bg-zinc-900 text-red-500 focus:ring-red-500/30 w-4 h-4"
+                className="rounded border-zinc-700 bg-zinc-900 text-emerald-500 focus:ring-emerald-500/30 w-4 h-4"
               />
               <span>Alert if Auto-Buy fails or gets canceled</span>
             </label>
@@ -322,7 +323,7 @@ export default function TelegramModal({ open, onClose }: TelegramModalProps) {
             variant="secondary"
             loading={isSendingTest}
             onClick={handleSendTest}
-            className="w-full text-xs font-medium py-2.5 border-white/[0.12] hover:border-red-500/40"
+            className="w-full text-xs font-medium py-2.5 border-white/[0.12] hover:border-emerald-500/40"
           >
             💬 Send Test Message to Telegram
           </Button>

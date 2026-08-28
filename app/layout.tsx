@@ -19,9 +19,9 @@ export const metadata: Metadata = {
   title: 'PONSEYE — Robinhood Chain',
   description: 'PONSEYE — High-speed token sniping, portfolio management, and universal DEX routing on Robinhood Chain.',
   icons: {
-    icon: '/icon.png',
-    shortcut: '/icon.png',
-    apple: '/icon.png',
+    icon: '/logo.svg',
+    shortcut: '/logo.svg',
+    apple: '/logo.svg',
   },
 }
 
@@ -31,8 +31,8 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased dark`}
     >
-      <body className="min-h-full flex flex-col bg-[#060608] text-zinc-100 antialiased selection:bg-red-500/20 selection:text-red-300 relative overflow-x-hidden">
-        {/* Ambient Crimson Gradient & Sparkling Particles Background */}
+      <body className="min-h-full flex flex-col bg-[#050807] text-zinc-100 antialiased selection:bg-emerald-500/25 selection:text-emerald-200 relative overflow-x-hidden">
+        {/* Ambient Apple Glass Emerald Gradient & Sparkling Particles Background */}
         <SparkleBackground />
 
         {/* App Content */}

@@ -13,6 +13,7 @@ import SendModal from '@/components/wallet/SendModal'
 import ReceiveModal from '@/components/wallet/ReceiveModal'
 import SwapModal from '@/components/wallet/SwapModal'
 import TelegramModal from '@/components/telegram/TelegramModal'
+import FullscreenIntro from '@/components/landing/FullscreenIntro'
 import Footer from '@/components/Footer'
 import Spinner from '@/components/ui/Spinner'
 
@@ -20,6 +21,9 @@ export default function DashboardPage() {
   const { authenticated, ready, logout } = usePrivy()
   const router = useRouter()
   const [loggingOut, setLoggingOut] = useState(false)
+
+  // Fullscreen cinematic intro state: always starts true on refresh when user is not logged in
+  const [showIntro, setShowIntro] = useState(true)
 
   // Wallet & Integration Modal States
   const [sendOpen, setSendOpen] = useState(false)
@@ -29,19 +33,18 @@ export default function DashboardPage() {
   const [selectedSwapCa, setSelectedSwapCa] = useState<string | undefined>(undefined)
 
   useEffect(() => {
-    if (ready && !authenticated) {
-      if (typeof window !== 'undefined' && window.location.pathname !== '/') {
-        window.location.replace('/')
-      }
+    if (ready && authenticated) {
+      setShowIntro(false)
     }
   }, [ready, authenticated])
 
   async function handleLogout() {
     setLoggingOut(true)
     await logout()
-    if (typeof window !== 'undefined') {
-      window.location.replace('/')
-    }
+  }
+
+  function handleCompleteIntro() {
+    setShowIntro(false)
   }
 
   function handleOpenSwapWithToken(ca?: string) {
@@ -54,7 +57,7 @@ export default function DashboardPage() {
     setSelectedSwapCa(undefined)
   }
 
-  if (!ready || !authenticated) {
+  if (!ready) {
     return (
       <div className="flex flex-1 items-center justify-center min-h-screen bg-transparent">
         <Spinner size="lg" />
@@ -63,13 +66,20 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-transparent text-zinc-100">
-      {/* Header Navigation */}
-      <Navbar
-        onLogout={handleLogout}
-        loggingOut={loggingOut}
-        onOpenTelegram={() => setTelegramOpen(true)}
-      />
+    <>
+      {/* 1. Fullscreen Cinematic Intro (Starts from the beginning on refresh when not logged in) */}
+      {showIntro && !authenticated && (
+        <FullscreenIntro onComplete={handleCompleteIntro} />
+      )}
+
+      {/* 2. Main Terminal Dashboard */}
+      <div className="flex flex-col min-h-screen bg-transparent text-zinc-100 animate-fadeIn">
+        {/* Header Navigation with Login button for guests */}
+        <Navbar
+          onLogout={handleLogout}
+          loggingOut={loggingOut}
+          onOpenTelegram={() => setTelegramOpen(true)}
+        />
 
       {/* Unified Split-Screen Main Terminal */}
       <main className="flex-1 w-full max-w-[1720px] mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8">
@@ -106,5 +116,6 @@ export default function DashboardPage() {
       <SwapModal open={swapOpen} onClose={handleCloseSwap} initialCa={selectedSwapCa} />
       <TelegramModal open={telegramOpen} onClose={() => setTelegramOpen(false)} />
     </div>
+    </>
   )
 }
